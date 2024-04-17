@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Friend;
+use App\Models\hobby;
 use App\Http\Requests\StoreFriendRequest;
 use App\Http\Requests\UpdateFriendRequest;
 use Illuminate\Support\Facades\Session;
@@ -14,9 +15,11 @@ class FriendController extends Controller
      */
     public function index()
     {
-        return view('friends.index', [
-            'friends' => Friend::all()
-        ]);
+        // Retrieve all friends with their associated hobbies
+        $friends = Friend::with('hobbies')->get();
+    
+        // Pass the friends data to the view
+        return view('friends.index', compact('friends'));
     }
 
     /**
@@ -24,7 +27,7 @@ class FriendController extends Controller
      */
     public function create()
     {
-        return view('friends.create');
+        return view('friends.create', ['hobbies'=>hobby::all()]);
     }
 
     /**
@@ -33,27 +36,39 @@ class FriendController extends Controller
     public function store(StoreFriendRequest $request)
     {
         $friend = Friend::create($request->validated());
+        $friend->hobbies()->attach($request->hobby);
 
         Session::flash('success', 'Friend added successfully');
         return redirect()->route('friends.index');
     }
 
-
     public function show(Friend $friend)
     {
+        
+        $friend->load('hobbies');
+        
+        
         return view('friends.show', compact('friend'));
     }
+    
 
   
     public function edit(Friend $friend)
     {
-        return view('friends.edit', compact('friend'));
+        // Retrieve all hobbies
+        $hobbies = Hobby::all();
+        
+        // Pass friend and hobbies data to the view
+        return view('friends.edit', compact('friend', 'hobbies'));
     }
+    
 
 
     public function update(UpdateFriendRequest $request, Friend $friend)
     {
         $friend->update($request->validated());
+        return redirect()->route('friends.index');
+
     }
 
  

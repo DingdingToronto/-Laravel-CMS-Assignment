@@ -7,7 +7,7 @@
         </div>
     </div>
     <div class="row">
-        <form action="{{ route('friends.update', $friend->id) }}" method="PUT">
+        <form action="{{ route('friends.update', $friend->id) }}" method="Post">
             @if ($errors->any())
                 <div class="alert alert-danger">
                     <ul>
@@ -18,6 +18,7 @@
                 </div>
             @endif
             {{ csrf_field() }}
+            @method('PUT')
             <div class="mb-3">
                 <label for="fname" class="form-label">First Name</label>
                 <input type="text" class="form-control" id="fname" name="fname" aria-describedby="fname" value="{{ $friend->fname }}">
@@ -30,7 +31,16 @@
                 <label for="lname" class="form-label">Age</label>
                 <input type="number" class="form-control" id="age" name="age" aria-describedby="age" value="{{ $friend->age }}">
             </div>
-           
+            <div class="form-group">
+            <label for="hobby">Select Hobby</label>
+            <select name="hobby" id="hobby" class="form-control">
+                @foreach ($hobbies as $hobby)
+                    <option value="{{ $hobby->id }}">
+                        {{ $hobby->hobbyName }}
+                    </option>
+                @endforeach
+            </select>
+            </div>
             <button type="submit" class="btn btn-primary">Submit</button>
         </form>
     </div>

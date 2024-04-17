@@ -1,4 +1,5 @@
-@extends('layouts.admin');
+@extends('layouts.admin')
+
 @section('content')
 <div class="row">
     <div class="col">
@@ -9,29 +10,39 @@
 </div>
 <div class="row">
     <form action="{{ route('friends.store') }}" method="post">
-    @if ($errors->any())
-    <div class="alert alert-danger">
-        <ul>
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-    </ul>
-</div>
-@endif{{ csrf_field() }}
-<div class="mb-3">
-    <label for="fname" class="form-label">First Name</label>
-    <input type="text" class="form-control" id="fname" name="fname" aria-describedby="fname">
-</div>
-<div class="mb-3">
-    <label for="lname" class="form-label">Last Name</label>
-    <input type="text" class="form-control" id="lname" name="lname" aria-describedby="lname">
-</div>
-<div class="mb-3">
-    <label for="age" class="form-label">Age</label>
-    <input type="number" class="form-control" id="age" name="age" aria-describedby="age" min="18" max="100">
-</div>
-
-<button type="submit" class="btn btn-primary">Submit</button>
-</form>
+        @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+        @endif
+        {{ csrf_field() }}
+        <div class="mb-3">
+            <label for="fname" class="form-label">First Name</label>
+            <input type="text" class="form-control" id="fname" name="fname" aria-describedby="fname">
+        </div>
+        <div class="mb-3">
+            <label for="lname" class="form-label">Last Name</label>
+            <input type="text" class="form-control" id="lname" name="lname" aria-describedby="lname">
+        </div>
+        <div class="mb-3">
+            <label for="age" class="form-label">Age</label>
+            <input type="number" class="form-control" id="age" name="age" aria-describedby="age" min="18" max="100">
+        </div>
+        <div class="form-group">
+            <label for="hobby">Select Hobby</label>
+            <select name="hobby" id="hobby" class="form-control">
+                @foreach ($hobbies as $hobby)
+                    <option value="{{ $hobby->id }}">
+                        {{ $hobby->hobbyName }}
+                    </option>
+                @endforeach
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
 </div>
 @endsection
